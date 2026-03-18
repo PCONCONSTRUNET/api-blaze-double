@@ -121,12 +121,16 @@ const startDOMScraping = async () => {
         setInterval(async () => {
             if (browser.isConnected()) {
                 try {
+                    const pageTitle = await page.title();
+                    console.log(`[DEBUG] Page Title: ${pageTitle} | URL: ${page.url()}`);
+                    
                     const rolls = await page.evaluate(() => {
                         // O histórico real da Blaze usa '.sm-box'. O '.roulette-tile' é a roleta girando!
                         // Vamos pegar apenas o histórico e filtrar vazios.
                         // Em algumas versões, Blaze tem duas div com .sm-box (uma na esquerda, outra na direita). 
                         // Pegamos direto do document, pois todo .sm-box visível pertence ao histórico.
                         const boxes = Array.from(document.querySelectorAll('.sm-box'));
+
 
                         return boxes.map(el => {
                             const className = el.className.toLowerCase();
